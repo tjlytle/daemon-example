@@ -5,49 +5,49 @@ use GuzzleHttp\Psr7;
 
 //autoloading and config
 require_once '../vendor/autoload.php';
-$config = include '../config.php';
 
-error_log('loaded config');
+error_log('pid: ' . getmypid());
 
-//http client
-$client = new HttpClient();
+$getStream = function(){
+    $config = include '../config.php';
+    error_log('loaded config');
 
-//oauth setup
-$oauth = new Oauth1($config['oauth']);
-$client->getConfig('handler')->push($oauth);
+    //http client
+    $client = new HttpClient();
 
-error_log('setup oauth');
+    //oauth setup
+    $oauth = new Oauth1($config['oauth']);
+    $client->getConfig('handler')->push($oauth);
 
-//tracked keywords
-$track = [
-    'fail',
-    'php',
-    'tjlytle'
-];
+    error_log('setup oauth');
 
-//request for twitter's stream api
-$request = new Psr7\Request(
-    'POST',
-    'https://stream.twitter.com/1.1/statuses/filter.json',
-    ['Content-Type' => 'application/x-www-form-urlencoded'],
-    //set the track keywords
-    http_build_query([
-        'track' => implode(',', $track)
-    ])
-);
+    //tracked keywords
+    $track = $config['track'];
+    error_log('tracking: ' . implode(',', $track));
 
-error_log('created stream request');
+    //request for twitter's stream api
+    $request = new Psr7\Request(
+        'POST',
+        'https://stream.twitter.com/1.1/statuses/filter.json',
+        ['Content-Type' => 'application/x-www-form-urlencoded'],
+        //set the track keywords
+        http_build_query([
+	    'track' => implode(',', $track)
+        ])
+    );
 
-//get the streamed response
-$response = $client->send($request, ['stream' => true, 'auth' => 'oauth']);
-$stream = $response->getBody();
+    error_log('created stream request');
 
-error_log('connected to stream');
+    //get the streamed response
+    $response = $client->send($request, ['stream' => true, 'auth' => 'oauth']);
+    $stream = $response->getBody();
+
+    return $stream;
+};
 
 //read lines from the response
 $count = 0;
 $start = $time = time();
-
 $run = true;
 
 //stats call
@@ -58,18 +58,24 @@ $stats = function($count, $start){
     return time();
 };
 
-//add some signals
+//shutdown
 $shutdown = function($signal) use (&$run){
     error_log('caught signal: ' . $signal);
     $run = false;
 };
 
-//how often should we check for signals
-declare(ticks = 1);
+//reload
+$reload = function($signal) use ($getStream, &$stream){
+    error_log('caught signal: ' . $signal);
+    $stream = $getStream();
+};
 
 //register the handler
 pcntl_signal(SIGINT, $shutdown);
+pcntl_signal(SIGHUP, $reload);
 
+$stream = $getStream();
+error_log('connected to stream');
 while(!$stream->eof() AND $run){
     $tweet = Psr7\readline($stream);
     $tweet = json_decode($tweet, true);
@@ -81,6 +87,9 @@ while(!$stream->eof() AND $run){
     if(time() > ($time + 30)){
         $time = $stats($count, $start);
     }
+
+    //only process the signals here
+    pcntl_signal_dispatch();
 }
 
 //do some shutdown like things
