@@ -1,0 +1,14 @@
+<?php
+return [
+    'oauth' => [
+        'consumer_key'    => 'fancy_twitter_key',
+        'consumer_secret' => 'nifty_twitter_secret',
+        'token'           => 'snowflake_of_a_token',
+        'token_secret'    => 'your_very_own_secret'
+    ],
+    'track' => [
+        'fail',
+        'php',
+        'tjlytle',
+    ]
+];

@@ -1,7 +1,7 @@
 <?php
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
-use GuzzleHttp\Stream as Stream;
+use GuzzleHttp\Psr7;
 
 //autoloading and config
 require_once '../vendor/autoload.php';
@@ -12,32 +12,33 @@ $client = new HttpClient();
 
 //oauth setup
 $oauth = new Oauth1($config['oauth']);
-$client->getEmitter()->attach($oauth);
+$client->getConfig('handler')->push($oauth);
 
 //tracked keywords
 $track = [
     'fail',
-    'lvphp',
-    'lvtech',
+    'php',
     'tjlytle'
 ];
 
 //request for twitter's stream api
-$request = $client->createRequest(
+$request = new Psr7\Request(
     'POST',
     'https://stream.twitter.com/1.1/statuses/filter.json',
-    ['stream' => true, 'auth' => 'oauth']);
-
-//set the track keywords
-$request->getBody()->setField('track', implode(',', $track));
+    ['Content-Type' => 'application/x-www-form-urlencoded'],
+    //set the track keywords
+    http_build_query([
+        'track' => implode(',', $track)
+    ])
+);
 
 //get the streamed response
-$response = $client->send($request);
+$response = $client->send($request, ['stream' => true, 'auth' => 'oauth']);
 $stream = $response->getBody();
 
 //read lines from the response
 while(!$stream->eof()){
-    $tweet = Stream\read_line($stream);
+    $tweet = Psr7\readline($stream);
     $tweet = json_decode($tweet, true);
     if(isset($tweet['text'])){
         error_log($tweet['text']);

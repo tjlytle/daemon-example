@@ -1,7 +1,7 @@
 {
     "minimum-stability": "stable",
     "require": {
-        "guzzlehttp/guzzle": "4.0.2",
-        "guzzlehttp/oauth-subscriber": "0.1.x"
+        "guzzlehttp/guzzle": "6.2.2",
+        "guzzlehttp/oauth-subscriber": "0.3.0"
     }
 }
