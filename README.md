@@ -14,13 +14,17 @@ setup before hand:
 - [beanstalkd][beanstalkd]
 - MySQL (or MariaDB)
 
-To make it easy, the included vagrant configuration should take care of all setup:
+Since you generally learn better when you're comfortable, you can certainly just use your local development environment
+if you're comfortable with installing those few dependencies. However, to make it easy, the included [vagrant 
+configuration](./Vagrantfile) and [bootstrap script](./vagrant/bootstrap.sh) should take care of all setup without any 
+change to your local system:
     
     vagrant up
     vagrant ssh
     cd /vagrant
     
-_For how to install vagrant, visit the [official download page][vagrant]._
+_For how to install vagrant, visit the [official install guide][vagrant]. You'll also need [VirtualBox][virtualbox] as
+this vagrant 'box' is a VirtualBox image._
 
 Configuration
 -------------
@@ -46,4 +50,5 @@ at these meetups / conferences:
 [nexmo]: https://dashboard.nexmo.com/sign-up?utm_source=DEV_REL&utm_medium=github&utm_campaign=tjlytle/daemon-example
 [beanstalkd]: http://kr.github.io/beanstalkd/
 [twitter]: https://dev.twitter.com/oauth/overview/application-owner-access-tokens
-[vagrant]: https://www.vagrantup.com/downloads.html
+[vagrant]: https://www.vagrantup.com/docs/installation/
+[virtualbox]: https://www.vagrantup.com/docs/virtualbox/
