@@ -2,6 +2,15 @@
     "minimum-stability": "stable",
     "require": {
         "guzzlehttp/guzzle": "6.2.2",
-        "guzzlehttp/oauth-subscriber": "0.3.0"
+        "guzzlehttp/oauth-subscriber": "0.3.0",
+        "nexmo/client": "@beta"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "^1.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wakeup\\": "wakeup/src/"
+        }
     }
 }

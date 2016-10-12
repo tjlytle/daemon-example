@@ -8,8 +8,10 @@ creation from initial simplistic concept to a well formed long running process o
 Setup
 -----
 Other than the composer dependencies, you'll need:
-- beanstalkd
-- MySQL
+- A [Nexmo][nexmo] Account 
+- Twitter [OAuth Tokens][twitter] 
+- [beanstalkd][beanstalkd]
+- MySQL (or MariaDB)
 
 The included vagrant configuration should take care of all setup:
     
@@ -33,3 +35,6 @@ at these meetups / conferences:
 - OpenWest
 
 [talk]: https://prezi.com/0l3a7q5dywc6/building-php-daemons-and-long-running-processes/
+[nexmo]: https://dashboard.nexmo.com/sign-up?utm_source=DEV_REL&utm_medium=github&utm_campaign=tjlytle/daemon-example
+[beanstalkd]: http://kr.github.io/beanstalkd/
+[twitter]: https://dev.twitter.com/oauth/overview/application-owner-access-tokens
