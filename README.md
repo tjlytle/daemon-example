@@ -26,8 +26,9 @@ change to your local system:
 _For how to install vagrant, visit the [official install guide][vagrant]. You'll also need [VirtualBox][virtualbox] as
 this vagrant 'box' is a VirtualBox image._
 
-**If you have any problems setting this up prior to the workshop**: [create an issue](./issues/new), ping [`tjlytle`][t] 
-on Twitter, or send me an email (_my name is `tim` and I own `timlytle.net`, I'm sure you can figure it out_).
+**If you have any problems setting this up prior to the workshop**: [create an issue](../../issues/new), ping 
+[`tjlytle`][t] on Twitter, or send me an email (_my name is `tim` and I own `timlytle.net`, I'm sure you can figure 
+it out_).
 
 Configuration
 -------------
