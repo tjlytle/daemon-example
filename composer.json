@@ -3,10 +3,11 @@
     "require": {
         "guzzlehttp/guzzle": "6.2.2",
         "guzzlehttp/oauth-subscriber": "0.3.0",
-        "nexmo/client": "@beta"
+        "nexmo/client": "@beta",
+        "pda/pheanstalk": "^3.1"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer": "^1.12"
+        "friendsofphp/php-cs-fixer": "^1.12"
     },
     "autoload": {
         "psr-4": {

@@ -10,5 +10,14 @@ return [
         'fail',
         'php',
         'tjlytle',
+    ],
+    'nexmo' => [
+        'key' => 'an_exciting_key',
+        'secret' => 'the_secure_secret'
+    ],
+    'wakeup' => [
+        'dbname' => 'wakeup',
+        'dbuser' => 'vagrant',
+        'dbpass' => 'vagrant'
     ]
 ];
