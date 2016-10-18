@@ -14,7 +14,7 @@ if(!array_diff(['p', 'n', 't'], $args)){
     $service->addWakeup(new DateTime($getopt['t']), $getopt['p'], $getopt['n'], $getopt['m']);
     error_log('added request to database');
 } elseif(in_array('list', $args)) {
-    foreach($service->fetchAllWakups() as $row){
+    foreach($service->fetchAllWakeups() as $row){
         echo "[{$row['date']}] {$row['number']}\n  {$row['message']}\n";
     }
 }

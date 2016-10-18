@@ -9,13 +9,28 @@ class Service
      */
     protected $config;
 
+    /**
+     * @var \PDO
+     */
     protected $dbh;
+
+    /**
+     * @var \PDOStatement
+     */
+    protected $insert;
+
+    /**
+     * @var \PDOStatement
+     */
+    protected $active;
 
     public function __construct($config)
     {
         $this->config = $config;
         $this->dbh = new \PDO('mysql:host=localhost;dbname=' . $config['wakeup']['dbname'], $config['wakeup']['dbuser'], $config['wakeup']['dbpass']);
         $this->insert = $this->dbh->prepare('INSERT INTO `requests` (`date`, `number`, `name`, `message`) VALUES (:date, :number, :name, :message)');
+        $this->active = $this->dbh->prepare('SELECT `request_id`, `date`, `number`, `message` FROM `requests` WHERE `date` < ? AND `queued` = 0');
+        $this->queue  = $this->dbh->prepare('UPDATE `requests` SET `queued` = 1 WHERE `request_id` = ?');
     }
 
     public function addWakeup($date, $number, $name, $message = null)
@@ -38,27 +53,49 @@ class Service
         $this->insert->bindValue(':message', $message);
 
         $this->insert->execute();
-
-        error_log(json_encode($this->insert->errorInfo()));
     }
 
-    public function fetchAllWakups()
+    public function fetchActiveWakeup($date)
+    {
+        if(!($date instanceof \DateTime)){
+            $date = new \DateTime($date);
+        }
+
+        if(!$this->active->execute([$date->format("Y-m-d H:i:s")])){
+            error_log(json_encode($this->dbh->errorCode()));
+            error_log(json_encode($this->active->errorInfo()));
+            return [];
+        }
+
+        return $this->active->fetchAll();
+    }
+
+    public function markQueued($id)
+    {
+        $this->queue->execute([$id]);
+    }
+
+    public function fetchAllWakeups()
     {
         return iterator_to_array($this->dbh->query('SELECT `date`, `number`, `message` FROM `requests`'));
     }
 
     public function createTable()
     {
-        $sql = "CREATE table requests(
+        $this->dbh->exec('DROP TABLE `requests`');
+
+        $sql = "CREATE TABLE requests(
           `request_id` INT( 11 ) AUTO_INCREMENT PRIMARY KEY, 
           `date` DATETIME, 
           `number` VARCHAR(20), 
           `name` VARCHAR(32), 
-          `message` VARCHAR(140)
+          `message` VARCHAR(140),
+          `queued` TINYINT(1) DEFAULT 0
         );";
 
         if(0 !== $this->dbh->exec($sql)){
             error_log('could not create database');
+            error_log(json_encode($this->dbh->errorInfo()));
             return;
         }
 
