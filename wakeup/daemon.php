@@ -56,6 +56,7 @@ while($run){
         error_log('api error: ' . $data['status']);
         //try again in a minute
         $queue->release($job, \Pheanstalk\PheanstalkInterface::DEFAULT_PRIORITY, 60);
+        continue;
     }
 
     //log that the call was made
