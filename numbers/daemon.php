@@ -7,6 +7,7 @@ $config = include '../config.php';
 //setup queue
 $queue = new \Pheanstalk\Pheanstalk($config['beanstalk']['host']);
 $queue->watchOnly('normalize');
+$queue->useTube('write');
 
 //setup nexmo
 $nexmo = new Nexmo\Client(new \Nexmo\Client\Credentials\Basic($config['nexmo']['key'], $config['nexmo']['secret']));
@@ -54,23 +55,24 @@ while($run){
     $data = $response->getBody()->getContents();
     $data = json_decode($data, true);
 
-    //open file for writing
-    $fp = fopen($file, 'a');
-    error_log('writing to ' . $file);
-
     //no number data found
     if(!$data OR !isset($data['status']) OR !($data['status'] == 0)){
-        fputcsv($fp, array_merge($row, [null, null]));
+        $queue->put(json_encode([
+            'write' => array_merge($row, [null, null]),
+            'file'  => $file
+        ]));
     //number data found
     } else {
-        fputcsv($fp, array_merge($row, [
-            $data['international_format_number'],
-            $data['national_format_number']
+        $queue->put(json_encode([
+            'write' => array_merge($row, [
+                $data['international_format_number'],
+                $data['national_format_number']
+            ]),
+            'file' => $file
         ]));
     }
 
-    //close file and mark job as complete
-    fclose($fp);
+    //mark job as complete
     $queue->delete($job);
     error_log('deleted job: ' . $job->getId());
 }
