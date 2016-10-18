@@ -19,8 +19,10 @@ declare(ticks=1);
 //track open files
 $files = [];
 
-//queue will block until there's a job
-while($run AND $job = $queue->reserve(10)){
+error_log('listening for jobs');
+while($run){
+    //queue will block until there's a job
+    $job = $queue->reserve(10);
 
     if(!$job){
         error_log('queue timeout');
