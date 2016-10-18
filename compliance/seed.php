@@ -18,12 +18,16 @@ pcntl_signal(SIGINT, function() use (&$run){
 declare(ticks=1);
 
 while($run){
+    $found = false;
     foreach ($service->fetchStalePages(new DateTime('-1 hour')) as $page){
         $queue->put($page['url']);
         $service->markRequested($page['url']);
         error_log('added ' . $page['url']);
+        $found = true;
     }
 
-    error_log('sleeping');
-    sleep(60);
+    if(!$found){
+        error_log('sleeping');
+        sleep(10);
+    }
 }
