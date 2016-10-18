@@ -5,7 +5,7 @@ require_once '../vendor/autoload.php';
 $config = include '../config.php';
 $service = new \Wakeup\Service($config);
 
-// [p]hone, [n]ame [t]ime [m]essage
+//[p]hone, [n]ame [t]ime [m]essage
 $getopt = getopt('p:n:t:m:', ['list']);
 $getopt = array_merge(['m' => null], $getopt);
 $args = array_keys($getopt);
