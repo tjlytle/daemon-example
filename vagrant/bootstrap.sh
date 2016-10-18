@@ -10,3 +10,5 @@ apt-get install -y make unzip php-dev php-curl beanstalkd
 
 mysql -e "CREATE DATABASE wakeup"
 mysql -e "grant all privileges on wakeup.* to 'vagrant'@'localhost' identified by 'vagrant'"
+mysql -e "CREATE DATABASE compliance"
+mysql -e "grant all privileges on compliance.* to 'vagrant'@'localhost' identified by 'vagrant'"
