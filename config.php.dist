@@ -19,5 +19,13 @@ return [
         'dbname' => 'wakeup',
         'dbuser' => 'vagrant',
         'dbpass' => 'vagrant'
+    ],
+    'compliance'   => [
+        'dbname'   => 'compliance',
+        'dbuser'   => 'vagrant',
+        'dbpass'   => 'vagrant',
+        'keywords' => [
+            'vonage'
+        ]
     ]
 ];
