@@ -19,8 +19,16 @@ pcntl_signal(SIGINT, function() use (&$run){
 });
 declare(ticks=1);
 
-//queue will block until there's a job
-while($run AND $job = $queue->reserve()){
+error_log('listening for jobs');
+while($run){
+    //queue will block until there's a job
+    $job = $queue->reserve(10);
+
+    if(!$job){
+        error_log('queue timeout');
+        continue;
+    }
+
     //once we have a job, unserialize the data
     error_log('got job: ' . $job->getId());
     $data = json_decode($job->getData(), true);
