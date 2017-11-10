@@ -6,7 +6,7 @@ $config = include '../config.php';
 $service = new \Wakeup\Service($config);
 
 //setup queue
-$queue = new \Pheanstalk\Pheanstalk($config['beanstalkd']['host']);
+$queue = new \Pheanstalk\Pheanstalk($config['beanstalk']['host']);
 $queue->watchOnly('wakeup');
 
 //setup nexmo
