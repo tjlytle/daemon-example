@@ -26,13 +26,12 @@ The included [`docker-compse.yml`](./docker-compose.yml) should create the
 containers needed, and allow you to use `mysql` and `beanstalkd` as the 
 hostnames for those services.  
 
-Since everything is CLI, the php container will exit immediately. To get a shell
-in the (really _a_) php container:
+Since everything is CLI, the php container will exit immediately. Use 
+`docker-compose run` to get a shell in the (really _a_) php container. You'll 
+be dropped into the project root and your container will be on the same network 
+as the other containers: 
 
 `docker-compose run --rm php`
-
-You'll be dropped into the project root and your container will be on the same 
-network as the other containers. 
 
 To access the MySQL database via the cli client:
 
