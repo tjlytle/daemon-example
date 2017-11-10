@@ -66,7 +66,7 @@ while($run){
     //check for compliance issues
     $found = [];
     foreach($config['compliance']['keywords'] as $keyword){
-        if($count = substr_count(strtolower($page), $keyword)){
+        if($count = substr_count(strtolower($page), strtolower($keyword))){
             $found[] = $keyword;
             error_log('found keyword `' . $keyword . '` on page: ' . $crawl);
         }
@@ -92,4 +92,6 @@ while($run){
         $service->addPage($url);
         error_log('added: ' . $url);
     }
+
+    $queue->delete($job);
 }

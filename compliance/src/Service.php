@@ -55,7 +55,7 @@ class Service
         $this->insert = $this->dbh->prepare('INSERT INTO `pages` (`url`) VALUES (?)');
         $this->update = $this->dbh->prepare('UPDATE `pages` SET `updated`= :date WHERE `url` = :url');
         $this->mark   = $this->dbh->prepare('UPDATE `pages` SET `requested`=:date WHERE `url` = :url');
-        $this->found  = $this->dbh->prepare('INSERT INTO `found` (`url`) VALUES (:url, :keyword, :date)');
+        $this->found  = $this->dbh->prepare('INSERT INTO `found` (`url`, `keyword`, `date`) VALUES (:url, :keyword, :date)');
         $this->stale  = $this->dbh->prepare('SELECT * FROM `pages` WHERE (`updated` < :updated OR `updated` IS NULL) AND (`requested` < :requested OR `requested` IS NULL)');
     }
 
@@ -99,11 +99,13 @@ class Service
         $date = date("Y-m-d H:i:s");
 
         foreach ($keywords as $keyword) {
-            $this->found->execute([
+            if(!$this->found->execute([
                 'url'     => $url,
                 'keyword' => $keyword,
                 'date'    => $date
-            ]);
+            ])){
+                var_dump($this->found->errorInfo());
+            }
         }
 
         $this->update->execute([
