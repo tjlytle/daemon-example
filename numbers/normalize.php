@@ -12,7 +12,7 @@ if(!isset($getopt['f'])){
 }
 
 //setup queue
-$queue = new \Pheanstalk\Pheanstalk('127.0.0.1');
+$queue = new \Pheanstalk\Pheanstalk($config['beanstalk']['host']);
 $queue->useTube('normalize');
 
 //create jobs for each number
