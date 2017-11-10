@@ -1,0 +1,39 @@
+version: "3.1"
+services:
+    php:
+      build: ./docker/php
+      image: tjlytle/php-workshop
+      container_name: workshop-php
+      working_dir: /workshop
+      volumes:
+        - .:/workshop
+      command: /bin/bash
+
+    number:
+      build: ./docker/php
+      image: tjlytle/php-workshop
+      container_name: workshop-php
+      working_dir: /workshop/numbers
+      volumes:
+        - .:/workshop
+      command: php daemon.php
+
+
+    mysql:
+      image: mysql:8.0
+      container_name: workshop-mysql
+      environment:
+        - MYSQL_ROOT_PASSWORD=workshop
+        - MYSQL_DATABASE=workshop
+        - MYSQL_USER=workshop
+        - MYSQL_PASSWORD=workshop
+
+    beanstalkd:
+      image: schickling/beanstalkd
+      container_name: workshop-beanstalkd
+
+    beanstalkd-console:
+      image: schickling/beanstalkd-console
+      container_name: workshop-beanstalkd-console
+      ports:
+          - '2080:2080'

@@ -1,34 +1,69 @@
 Building PHP Daemons & Long Running Processes
 =============================================
-This code is example daemons and long running processes related to the talk / workshop. The various branches show the 
-process of creation from initial simplistic concept to a well formed long running process or daemon. This means that:
+This code is example daemons and long running processes related to the talk / 
+workshop. The various branches show the process of creation from initial 
+simplistic concept to a well formed long running process or daemon. This means 
+that:
  
-**The associated branches will be rebased against `master` any time an example is added / updated!**
+**The associated branches will be rebased against `master` any time an example 
+is added / updated!**
 
 Setup
 -----
-If you're attending this as a workshop (or maybe you just want to take the examples for a spin), you should have these
-setup before hand:
+If you're attending this as a workshop (or maybe you just want to take the 
+examples for a spin), you should have these setup before hand:
 - A [Nexmo][nexmo] Account 
 - Twitter [OAuth Tokens][twitter] 
 - [beanstalkd][beanstalkd]
 - MySQL (or MariaDB)
 
-Since you generally learn better when you're comfortable, you can certainly just use your local development environment
-if you're comfortable with installing those few dependencies. However, to make it easy, the included [vagrant 
-configuration](./Vagrantfile) and [bootstrap script](./vagrant/bootstrap.sh) should take care of all setup without any 
-change to your local system:
+Since you generally learn better when you're comfortable, you can certainly just 
+use your local development environment if you're comfortable with installing 
+those few dependencies.
+ 
+### Docker
+The included [`docker-compse.yml`](./docker-compose.yml) should create the 
+containers needed, and allow you to use `mysql` and `beanstalkd` as the 
+hostnames for those services.  
+
+Since everything is CLI, the php container will exit immediately. To get a shell
+in the (really _a_) php container:
+
+`docker-compose run --rm php`
+
+You'll be dropped into the project root and your container will be on the same 
+network as the other containers. 
+
+To access the MySQL database via the cli client:
+
+`docker-compose run --rm mysql mysql -h mysql -u workshop -p`
+
+And to view a console of the beanstalk queue, visit: 
+[`http://localhost:2080`](http://localhost:2080)
+
+_For how to install `docker` and `docker-compose` visit the [official install 
+guide](https://docs.docker.com/compose/install/)._
+
+### Vagrant
+_Note: Docker is the preferred way to get a dev environment; however, this 
+should still work._
+
+The included [vagrant configuration](./Vagrantfile) and 
+[bootstrap script](./vagrant/bootstrap.sh) should take care of all setup without 
+any change to your local system:
     
     vagrant up
     vagrant ssh
     cd /vagrant
     
-_For how to install vagrant, visit the [official install guide][vagrant]. You'll also need [VirtualBox][virtualbox] as
-this vagrant 'box' is a VirtualBox image._
+_For how to install vagrant, visit the [official install guide][vagrant]. You'll 
+also need [VirtualBox][virtualbox] as this vagrant 'box' is a VirtualBox image._
 
-**If you have any problems setting this up prior to the workshop**: [create an issue](../../issues/new), ping 
-[`tjlytle`][t] on Twitter, or send me an email (_my name is `tim` and I own `timlytle.net`, I'm sure you can figure 
-it out_).
+### Support
+
+**If you have any problems setting this up prior to the workshop**: [create an 
+issue](../../issues/new), ping [`tjlytle`][t] on Twitter, or send me an email 
+(_my name is `tim` and I own `timlytle.net`, I'm sure you can figure it out_).
 
 Configuration
 -------------
@@ -37,7 +72,8 @@ you're not using vagrant, you may also need to update the database credentials. 
 
 Tutorial
 --------
-The longer form hands on workshop (using all the examples) will be given at:
+The longer form hands on workshop (using all the examples) given at:
+- php[world] 2017
 - ZendCon 2016
 
 Talk

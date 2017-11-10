@@ -16,16 +16,18 @@ return [
         'secret' => 'the_secure_secret'
     ],
     'wakeup' => [
-        'dbname' => 'wakeup',
-        'dbuser' => 'vagrant',
-        'dbpass' => 'vagrant'
+        'host'   => 'mysql'     //for vagrant use 'localhost'
+        'dbname' => 'workshop', //for vagrant use 'wakeup'
+        'dbuser' => 'workshop', //for vagrant use 'vagrant'
+        'dbpass' => 'workshop', //for vagrant use 'vagrant'
     ],
     'compliance'   => [
-        'dbname'   => 'compliance',
-        'dbuser'   => 'vagrant',
-        'dbpass'   => 'vagrant',
+        'host'     => 'mysql'     //for vagrant use 'localhost'
+        'dbname'   => 'workshop', //for vagrant use 'compliance'
+        'dbuser'   => 'workshop', //for vagrant use 'vagrant'
+        'dbpass'   => 'workshop', //for vagrant use 'vagrant'
         'keywords' => [
-            'vonage'
+            'lytle'
         ]
     ]
 ];
