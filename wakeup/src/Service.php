@@ -27,7 +27,7 @@ class Service
     public function __construct($config)
     {
         $this->config = $config;
-        $this->dbh = new \PDO('mysql:host=localhost;dbname=' . $config['wakeup']['dbname'], $config['wakeup']['dbuser'], $config['wakeup']['dbpass']);
+        $this->dbh = new \PDO('mysql:host=' . $config['wakeup']['host'] . ';dbname=' . $config['wakeup']['dbname'], $config['wakeup']['dbuser'], $config['wakeup']['dbpass']);
         $this->insert = $this->dbh->prepare('INSERT INTO `requests` (`date`, `number`, `name`, `message`) VALUES (:date, :number, :name, :message)');
         $this->active = $this->dbh->prepare('SELECT `request_id`, `date`, `number`, `message` FROM `requests` WHERE `date` < ? AND `queued` = 0');
         $this->queue  = $this->dbh->prepare('UPDATE `requests` SET `queued` = 1 WHERE `request_id` = ?');
