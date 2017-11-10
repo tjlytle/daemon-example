@@ -9,16 +9,6 @@ services:
         - .:/workshop
       command: /bin/bash
 
-    number:
-      build: ./docker/php
-      image: tjlytle/php-workshop
-      container_name: workshop-php
-      working_dir: /workshop/numbers
-      volumes:
-        - .:/workshop
-      command: php daemon.php
-
-
     mysql:
       image: mysql:8.0
       container_name: workshop-mysql
