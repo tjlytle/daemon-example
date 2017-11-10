@@ -39,8 +39,15 @@ error_log('looking for: ' . $keyword);
 do{
     //get the next page to crawl
     $crawl = array_pop($follow);
-    $response = $client->get($crawl);
-    $page = $response->getBody()->getContents();
+
+    try{
+        $response = $client->get($crawl);
+        $page = $response->getBody()->getContents();
+    } catch (\GuzzleHttp\Exception\ClientException $e) {
+        error_log('could not crawl page:' . $crawl);
+        error_log($e->getMessage());
+        continue;
+    }
 
     error_log('fetched: ' . $crawl);
 
@@ -61,7 +68,7 @@ do{
     }
 
     //check for compliance issues
-    if($count = substr_count(strtolower($page), $keyword)){
+    if($count = substr_count(strtolower($page), strtolower($keyword))){
         //alert someone if set
         if(isset($getopt['a'])){
             error_log('alerting user');

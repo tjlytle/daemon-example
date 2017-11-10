@@ -49,7 +49,7 @@ class Service
     public function __construct($config)
     {
         $this->config = $config;
-        $this->dbh = new \PDO('mysql:host=localhost;dbname=' . $config['compliance']['dbname'], $config['compliance']['dbuser'], $config['compliance']['dbpass']);
+        $this->dbh = new \PDO('mysql:host=' . $config['wakeup']['host'] . ';dbname=' . $config['compliance']['dbname'], $config['compliance']['dbuser'], $config['compliance']['dbpass']);
 
         $this->select = $this->dbh->prepare('SELECT * FROM `pages` WHERE `url` = ?');
         $this->insert = $this->dbh->prepare('INSERT INTO `pages` (`url`) VALUES (?)');
