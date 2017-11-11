@@ -26,16 +26,20 @@ The included [`docker-compse.yml`](./docker-compose.yml) should create the
 containers needed, and allow you to use `mysql` and `beanstalkd` as the 
 hostnames for those services.  
 
+To install dependencies using composer, use the composer docker image:
+
+    docker run --rm -it -v `pwd`:/app composer install
+
 Since everything is CLI, the php container will exit immediately. Use 
 `docker-compose run` to get a shell in the (really _a_) php container. You'll 
 be dropped into the project root and your container will be on the same network 
 as the other containers: 
 
-`docker-compose run --rm php`
+    docker-compose run --rm php
 
 To access the MySQL database via the cli client:
 
-`docker-compose run --rm mysql mysql -h mysql -u workshop -p`
+    docker-compose run --rm mysql mysql -h mysql -u workshop -p
 
 And to view a console of the beanstalk queue, visit: 
 [`http://localhost:2080`](http://localhost:2080)
