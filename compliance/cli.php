@@ -1,8 +1,8 @@
-#!/usr/bin/php
+#!/usr/local/bin/php
 <?php
 //autoloading and config
-require_once '../vendor/autoload.php';
-$config = include '../config.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+$config = include __DIR__ . '/../config.php';
 $nexmo = new Nexmo\Client(new \Nexmo\Client\Credentials\Basic($config['nexmo']['key'], $config['nexmo']['secret']));
 
 //base [u]rl, [k]eyword
