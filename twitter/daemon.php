@@ -4,8 +4,8 @@ use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use GuzzleHttp\Psr7;
 
 //autoloading and config
-require_once '../vendor/autoload.php';
-$config = include '../config.php';
+require_once __DIR__  . '/../vendor/autoload.php';
+$config = include __DIR__ . '/../config.php';
 
 //http client
 $client = new HttpClient();
