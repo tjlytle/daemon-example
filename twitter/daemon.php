@@ -1,3 +1,4 @@
+#!/usr/local/bin/php
 <?php
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
