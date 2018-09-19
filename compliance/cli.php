@@ -18,12 +18,12 @@ if(array_diff(['u', 'k'], $args)){
 }
 
 //basic params
-$domain  = $getopt['u'];
+$url  = $getopt['u'];
 $keyword = $getopt['k'];
 
 //tracking data
 $crawled = [];
-$follow  = ['https://' . $domain];
+$follow  = [$url];
 $found   = [];
 
 //http client
@@ -33,7 +33,7 @@ $client = new GuzzleHttp\Client([
     ]
 ]);
 
-error_log('seeding search with: ' . $domain);
+error_log('seeding search with: ' . $url);
 error_log('looking for: ' . $keyword);
 
 do{
@@ -43,7 +43,7 @@ do{
     try{
         $response = $client->get($crawl);
         $page = $response->getBody()->getContents();
-    } catch (\GuzzleHttp\Exception\ClientException $e) {
+    } catch (\GuzzleHttp\Exception\RequestException $e) {
         error_log('could not crawl page:' . $crawl);
         error_log($e->getMessage());
         continue;
@@ -85,13 +85,32 @@ do{
 
     $crawled[] = $crawl;
 
+    $domain = parse_url($crawl, PHP_URL_HOST);
+    $protocol = parse_url($crawl, PHP_URL_SCHEME);
+
     //find links to crawl
     foreach($xml->xpath('//a') as $link){
         $url = (string) $link['href'];
+        $url = strtok($url, '#');
+
         $host = parse_url($url, PHP_URL_HOST);
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+
+        if (!empty($scheme) && !in_array(strtolower($scheme), ['http', 'https'])) {
+            continue;
+        }
 
         if(!$host){
-            continue;
+            $host = $domain;
+            if ($url[0] === '/') {
+                $url = $host . $url;
+            } else {
+                $url = $crawl . $url;
+            }
+        }
+
+        if(!parse_url($url, PHP_URL_SCHEME)) {
+            $url = $protocol . '://' . $url;
         }
 
         //restrict to host
