@@ -26,7 +26,6 @@ declare(ticks=1);
 
 error_log('listening for job');
 while($run){
-
     //queue will block until there's a job
     $job = $queue->reserve(10);
     if(!$job){
@@ -74,18 +73,40 @@ while($run){
 
     $service->updatePage($crawl, $found);
 
+    $domain = parse_url($crawl, PHP_URL_HOST);
+    $protocol = parse_url($crawl, PHP_URL_SCHEME);
+
     //find links to crawl
     foreach($xml->xpath('//a') as $link){
         $url = (string) $link['href'];
+        $url = strtok($url, "#");
         $host = parse_url($url, PHP_URL_HOST);
-        $domain = parse_url($crawl, PHP_URL_HOST);
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+
+        if (!empty($scheme) && !in_array(strtolower($scheme), ['http', 'https'])) {
+            error_log('skipping (not http): ' . $url);
+            continue;
+        }
 
         if(!$host){
-            continue;
+            $host = $domain;
+            if ($url[0] === '/') {
+                $url = $host . $url;
+            } else {
+                $url = $crawl . $url;
+            }
+
+            error_log('added host: ' . $url);
+        }
+
+        if(!parse_url($url, PHP_URL_SCHEME)) {
+            $url = $protocol . '://' . $url;
+            error_log('added protocol: ' . $url);
         }
 
         //restrict to same host
         if(false === strpos($host, $domain)){
+            error_log('skipping (not same domain): ' . $url);
             continue;
         }
 
